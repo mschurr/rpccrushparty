@@ -33,7 +33,7 @@ class SurveyMatcher
 
 			// Questions
 			for($j = 0; $j < sizeof(SurveyConstants::$questions); $j++)
-				$data[':question_'.$j] = rand(0, sizeof(SurveyConstants::$questions[$j])-1);
+				$data[':question_'.$j] = rand(0, sizeof(SurveyConstants::$questions[$j]['options'])-1);
 
 			$stmt->execute($data);
 		}
