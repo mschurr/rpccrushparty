@@ -159,7 +159,9 @@ class MainController extends Controller
 
 	public function results()
 	{
-		return; // Don't allow access on a shared host.
+		if(!(php_sapi_name() == 'cli-server'))
+			return 403;
+
 		if($this->request->server['REMOTE_ADDR'] != '127.0.0.1' && $this->request->server['REMOTE_ADDR'] != '::1')
 			return 403;
 
@@ -169,7 +171,9 @@ class MainController extends Controller
 
 	public function seed()
 	{
-		return; // Don't allow access on a shared host.
+		if(!(php_sapi_name() == 'cli-server'))
+			return 403;
+		
 		if($this->request->server['REMOTE_ADDR'] != '127.0.0.1' && $this->request->server['REMOTE_ADDR'] != '::1')
 			return 403;
 

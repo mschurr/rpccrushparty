@@ -4,7 +4,7 @@ class SurveyConstants
 {
 	public static $title = 'RPC Crush Party 2014 Survey';
 	public static $eventDate = 'Thursday, February 13th 8:00 PM CST';
-	public static $expDate = 'Wednesday, February 12th 11:55 PM CST';
+	public static $expDate = 'Wednesday, February 11th 9:00 AM CST';
 
 	public static $majors = array(
 		'Undecided',
@@ -133,6 +133,7 @@ class SurveyConstants
 				'Big Bang Theory',
 				'Downton Abbey',
 				'The Bachelor(ette)',
+				'Game of Thrones',
 				'I don\'t really watch much television.'
 			)
 		),
@@ -148,11 +149,12 @@ class SurveyConstants
 			)
 		),
 		array(
-			'text' => 'What is your ideal hook up spot on campus?',
+			'text' => 'Of the following, what is your ideal hook up spot on campus?',
 			'options' => array(
 				'Fondren Basement',
 				'45/90/180 Angles',
 				'Public Party Dancefloor',
+				'Skyspace',
 				'Coffeehouse',
 				'Sid Rich Big Room',
 				'A bed... not neccesarily my own.'
@@ -177,7 +179,8 @@ class SurveyConstants
 				'Dr. Mikki Hebl',
 				'Dr. James Tour',
 				'Dr. Almba Moon Novotny',
-				'Dr. Dennis Huston'
+				'Dr. Dennis Huston',
+				'Dr. Luay Nakleh'
 			)
 		),
 		array(
@@ -230,7 +233,7 @@ class SurveyConstants
 				'Owl',
 				'Puppy',
 				'Giraffe',
-				'Iguana',
+				'Honeybadger',
 				'Squirrel',
 				'Reptar'
 			)
@@ -251,8 +254,8 @@ class SurveyConstants
 			'options' => array(
 				'Screamo',
 				'Classical',
-				'Pop/Rock',
-				'Hip-Hop/Rap/Electronic',
+				'Rock / Pop',
+				'Hip-Hop / Rap / Electronic',
 				'Country',
 				'Sounds of Nature'
 			)
@@ -287,18 +290,19 @@ class SurveyConstants
 				'Brewing 101',
 				'Public Policy Bootcamp',
 				'Intro to Photoshop',
-				'Personal Finanace'
+				'Personal Finanace',
+				'Web Application Development'
 			)
 		),
 		array(
-			'text' => 'Which Friends character do you identify with the most?',
+			'text' => 'Which <em>How I Met Your Mother</em> character do you identify with the most?',
 			'options' => array(
-				'Phoebe',
-				'Monica',
-				'Rachel',
-				'Ross',
-				'Chandler',
-				'Joey'
+				'Ted',
+				'Marshall',
+				'Robin',
+				'Lily',
+				'Barney',
+				'I haven\'t watched the show.'
 			)
 		),
 		array(

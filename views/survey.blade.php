@@ -60,7 +60,7 @@
 			@endforeach
 		</select></div>
 
-		<div class="label">Major:</div>
+		<div class="label">Intended Major:</div>
 		{{berror($errors,'major')}}
 		<div class="input"><select name="major">
 			<option value="-1"></option>
