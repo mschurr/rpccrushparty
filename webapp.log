@@ -18,3 +18,10 @@ HipHop Fatal error: syntax error, unexpected T_ARRAY, expecting ')' in /home/ect
 [01-Feb-2014 07:45:19 UTC] PHP Parse error:  syntax error, unexpected '$stmt' (T_VARIABLE) in /home/matthew/CRUSHPARTY/helpers/SurveySystem.php on line 379
 [01-Feb-2014 07:47:25 UTC] PHP Fatal error:  Call to a member function write() on a non-object in /home/matthew/CRUSHPARTY/webapp.php on line 161
 [01-Feb-2014 08:45:40 UTC] PHP Fatal error:  Maximum execution time of 60 seconds exceeded in /home/matthew/CRUSHPARTY/helpers/SurveySystem.php on line 502
+[01-Feb-2014 18:05:44 UTC] PHP Fatal error:  Class 'MaxAccumulator' not found in /home/matthew/rpccrushparty/helpers/SurveySystem.php on line 72
+[01-Feb-2014 18:14:51 UTC] PHP Fatal error:  Cannot call constructor in /home/matthew/rpccrushparty/helpers/Accumulators.php on line 97
+[01-Feb-2014 18:15:24 UTC] PHP Fatal error:  Class 'super' not found in /home/matthew/rpccrushparty/helpers/Accumulators.php on line 97
+[01-Feb-2014 18:15:25 UTC] PHP Fatal error:  Class 'super' not found in /home/matthew/rpccrushparty/helpers/Accumulators.php on line 97
+[01-Feb-2014 20:00:33 UTC] PHP Fatal error:  Can't inherit abstract function SplHeap::compare() (previously declared abstract in Accumulator) in /home/matthew/rpccrushparty/helpers/Accumulators.php on line 0
+[01-Feb-2014 20:01:37 UTC] PHP Fatal error:  Can't inherit abstract function SplHeap::compare() (previously declared abstract in Accumulator) in /home/matthew/rpccrushparty/helpers/Accumulators.php on line 0
+[01-Feb-2014 20:01:38 UTC] PHP Fatal error:  Can't inherit abstract function SplHeap::compare() (previously declared abstract in Accumulator) in /home/matthew/rpccrushparty/helpers/Accumulators.php on line 0

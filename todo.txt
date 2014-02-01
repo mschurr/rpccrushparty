@@ -1,5 +1,3 @@
-* Make the survey unavailable after certain point in time.
-* Print results out ordered alphabetically last,first
-* Double check matchmaking works correctly
 
+* Make the survey unavailable after certain point in time.
 * Add best/worst matches in major to results?

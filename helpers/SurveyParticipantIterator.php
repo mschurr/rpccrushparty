@@ -36,7 +36,7 @@ class SurveyParticipantIterator implements Iterator, Countable
 		if($this->buffer === null) {
 			$page = ceil($this->currentOffset/$this->batchSize);
 			if($page < 0) $page = 1;
-			$this->buffer = $this->db->query("SELECT * FROM `surveys` ORDER BY `id` ASC LIMIT ".($page*$this->batchSize).",".$this->batchSize.";");
+			$this->buffer = $this->db->query("SELECT * FROM `surveys` ORDER BY `last_name` ASC, `first_name` ASC LIMIT ".($page*$this->batchSize).",".$this->batchSize.";");
 		}
 		
 		return $this->buffer->rows[$this->currentOffset % $this->batchSize];

@@ -7,13 +7,13 @@ import('Accumulators');
 class SurveyMatcher
 {
 	/* Adds random records the database to test the match maker. */
-	public function seed()
+	public function seed($amount=200)
 	{
 		$db = App::getDatabase();
 		$fields = SurveyConstants::fields();
 		$stmt = $db->prepare("INSERT INTO `surveys` (".sql_keys($fields).") VALUES (".sql_values($fields).");");
 			
-		for($i = 0; $i < 150; $i++) {
+		for($i = 0; $i < $amount; $i++) {
 			$data = array(
 				':student_id' => '0',
 				':send_results' => '0',
@@ -40,9 +40,9 @@ class SurveyMatcher
 	}
 
 	/* Performs matching on all participants and displays the results, which can then be printed. */
-	public function match()
+	public function match($limit=null)
 	{
-		ini_set('max_execution_time', 600);
+		ini_set('max_execution_time', 1000);
 
 		$participants = new SurveyParticipantIterator();
 
@@ -53,8 +53,15 @@ class SurveyMatcher
 			</head>
 			<body>';
 
+		$i = 0;
+
 		foreach($participants as $participant) {
+			if($limit !== null && $i >= $limit)
+				break;
+
 			$this->printMatches($participant);
+
+			$i++;
 		}
 
 		echo '

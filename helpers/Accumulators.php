@@ -3,98 +3,95 @@
    The "best" items are determined by the outcome of the ->compare(a,b) function on scores.
    To retireve the items from the array, call ->toArray(). 
 
-   Note: This structure is slow; operations occur in O(N) time. It can be done faster, but I don't have enoguh time.
+   Implemented using a heap for fast access times.
    */
 
 abstract class Accumulator extends SplHeap
 {
-	public function __construct($size) {
-		
-	}
-}
+	protected $maxSize;
 
-
-
-
-
-
-abstract class AccumulatorOLD
-{
-	protected /*int*/ $size;
-	protected /*array<Object>*/ $items;
-	protected /*array<double>*/ $scores;
-	
-	public function __construct(/*int*/ $size)
+	public function __construct(/*int*/ $maxSize = 10)
 	{
-		$this->size = $size;
-		$this->items = array();
-		$this->scores = array();
-
-		for($i = 0; $i < $size; $i++) {
-			 $this->items[$i] = null;
-			 $this->scores[$i] = 0;
-		}
+		$this->maxSize = $maxSize;
 	}
 
-	public function add(/*Object*/ $item, /*double*/ $score)
+	public /*void*/ function insert(/*mixed*/ $value)
 	{
-		for($i = 0; $i < $this->size; $i++) {
-			if($this->items[$i] === null/* || $this->compare($score, $this->scores[$i]) > 0*/) {
-				$this->items[$i] = $item;
-				$this->scores[$i] = $score;
-				break;
+		if(sizeof($this) >= $this->maxSize) {
+			if($this->isBetter($value, parent::top()) === true) {
+				parent::extract();
+				parent::insert($value);
 			}
 		}
+		else {
+			parent::insert($value);
+		}
 	}
+
+	public /*void*/ function add(/*mixed*/  $item, /*double*/ $score)
+	{
+		$this->insert(
+			array(
+				'item' => $item,
+				'score' => $score
+			)
+		);
+	}
+
+	protected abstract /*bool*/ function isBetter($new, $worst);
+	//protected abstract /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2); // Order should place objects opposed to order you actually want them in
 
 	/* Returns items as an array of arraymaps in sorted order by score. */
 	public function toArray()
 	{
 		$array = array();
 
-		for($i = 0; $i < $this->size; $i++) {
-			if($this->items[$i] === null)
-				break;
-
-			$array[] = array(
-				'item' => $this->items[$i],
-				'score' => $this->scores[$i]
-			);
+		foreach($this as $item) {
+			array_unshift($array, $item);
 		}
-
-		usort($array, array($this, 'compareItems'));
 
 		return $array;
 	}
-
-	public /*int*/ function compareItems($a, $b)
-	{
-		return $this->compare($a['score'], $b['score']);
-	}
-	
-	public abstract /*int*/ function compare(/*double*/ $a, /*double*/ $b);
 }
 
-class MaxAccumulatorOLD extends Accumulator
+class MaxAccumulator extends Accumulator
 {
-	public function compare($a, $b)
+	/* Controls the ordering of items within the heap. */
+	protected /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2)
 	{
-		if($a < $b)
+		if($value2['score'] > $value1['score'])
 			return 1;
-		if($a == $b)
-			return 0;
-		return -1;
+		if($value2['score'] < $value1['score'])
+			return -1;
+		return 0;
+	}
+
+	/* Returns whether or not an item should be added to the heap. */
+	protected /*bool*/ function isBetter($new, $worst)
+	{
+		if($new['score'] < $worst['score'])
+			return false;
+		return true;
 	}
 }
 
-class MinAccumulatorOLD extends Accumulator
+class MinAccumulator extends Accumulator
 {
-	public function compare($a, $b)
+	/* Controls the ordering of items within the heap. */
+	protected /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2)
 	{
-		if($b > $a)
+		if($value2['score'] > $value1['score'])
 			return -1;
-		if($b == $a)
-			return 0;
-		return 1;
+		if($value2['score'] < $value1['score'])
+			return 1;
+		return 0;
+	}
+
+	/* Returns whether or not an item should be added to the heap. */
+	protected /*bool*/ function isBetter($new, $worst)
+	{
+		if($new['score'] > $worst['score'])
+			return false;
+		return true;
 	}
 }

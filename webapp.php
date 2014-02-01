@@ -156,7 +156,7 @@ class MainController extends Controller
 			return 403;
 
 		$matcher = new SurveyMatcher();
-		$matcher->match();
+		$matcher->match((isset($this->request->get['limit']) ? $this->request->get['limit'] : 150));
 	}
 
 	public function seed()
@@ -165,7 +165,7 @@ class MainController extends Controller
 			return 403;
 
 		$matcher = new SurveyMatcher();
-		$matcher->seed();
+		$matcher->seed((isset($this->request->get['limit']) ? $this->request->get['limit'] : 150));
 
 		$this->response->write('OK');
 	}
