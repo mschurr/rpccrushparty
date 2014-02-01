@@ -1,0 +1,165 @@
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(../fonts/open_sans_normal.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../fonts/open_sans_bold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(../fonts/open_sans_italic.woff) format('woff');
+}
+
+body {
+	font-family: 'Open Sans', 'Arial', sans-serif;
+}
+
+div.header {
+  font-size: 2em;
+  padding: 10px;
+  font-weight: bold;
+}
+
+div.label {
+	font-weight: bold;
+	padding: 5px 10px;
+}
+
+div.input {
+	padding: 10px;
+}
+
+div.text {
+	padding: 10px;
+}
+
+div.error {
+  padding: 10px;
+  color: red;
+  font-weight: bold;
+}
+
+div.wrapper {
+  max-width: 1000px;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+div.message {
+  padding: 10px;
+}
+
+div.content {
+
+}
+
+div.footer {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-size: 10px;
+}
+
+div._match {
+  padding: 20px;
+  width: 1024px;
+  border: 2px dotted #000;
+  margin-bottom: 20px;
+  /*page-break-before: always;*/
+  page-break-inside: avoid;
+  page-break-after: always;
+}
+
+div._match div.tbl {
+  display: table;
+  width: 100%;
+}
+
+div._match div.col {
+  display: table-cell;
+  width: 33%;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #000;
+}
+
+div._match div.col:last-child {
+  border-right: 1px solid #000;
+}
+
+div._match div.name {
+  font-size: 2em;
+  font-weight: bold;
+  padding-bottom: 0px;
+}
+
+div._match div.descr {
+  font-size: 1.3em;
+  padding-bottom: 10px;
+}
+
+div._match div.section {
+  font-size: 1.8em;
+  padding: 10px 0px;
+}
+
+div._match div.type {
+  font-size: 1.2em;
+  padding: 8px 10px 4px 10px;
+  font-style: italic;
+  border-bottom: 1px solid #000;
+  margin: 0px 10px 8px 10px;
+}
+
+div._match ul {
+  list-style-type: none;
+  margin: 8px 0px;
+  padding: 0;
+}
+
+div._match li {
+  margin: 0;
+  padding: 4px 10px;
+}
+
+div._match table {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+div._match table tr {
+
+}
+
+div._match table td {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  vertical-align: top;
+  line-height: 1.5em;
+}
+
+div._match table td.num {
+  text-align: right;
+  padding-right: 8px;
+  font-weight: bold;
+  width: 35px;
+}
+
+div._match span.detail {
+  font-style: italic;
+}
+
+div._match table td.perc {
+  text-align: right;
+  padding-right: 8px;
+  padding-left: 8px;
+  width: 40px;
+}
