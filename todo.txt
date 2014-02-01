@@ -1,3 +1,1 @@
-
-* Make the survey unavailable after certain point in time.
-* Add best/worst matches in major to results?
+* Add best/worst matches in major to results? not enough space

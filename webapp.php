@@ -8,13 +8,15 @@ Config::set(array(
 	'database.driver' => 'mysql',
 	'database.user'   => 'httpd',
 	'database.pass'   => 'httpd',
-	'database.name'   => 'crushparty'
+	'database.name'   => 'crushparty',
+	'crush.expired'   => false
 ));
 
 Route::get( '/',		'MainController@form'	);
-Route::post('/submit',	'MainController@submit'	);
+Route::any(	'/submit',	'MainController@submit'	);
 Route::get( '/error', 	'MainController@error'	);
 Route::get( '/thanks', 	'MainController@thanks'	);
+Route::get( '/expired', 'MainController@expired');
 Route::get( '/results', 'MainController@results');
 Route::get( '/seed', 	'MainController@seed'	);
 
@@ -22,6 +24,9 @@ class MainController extends Controller
 {
 	public function form($errors=array())
 	{
+		if(Config::get('crush.expired', false) === true)
+			return Redirect::to('/expired');
+
 		return View::make('survey')->with(array(
 			'genders'   => SurveyConstants::$genders,
 			'colleges'  => SurveyConstants::$colleges,
@@ -103,6 +108,9 @@ class MainController extends Controller
 
 	public function submit()
 	{
+		if(Config::get('crush.expired', false) === true)
+			return Redirect::to('/expired');
+
 		$errors = $this->_validate();
 
 		if(sizeof($errors) > 0)
@@ -148,6 +156,11 @@ class MainController extends Controller
 	public function error()
 	{
 		return View::make('error');
+	}
+
+	public function expired()
+	{
+		return View::make('expired');
 	}
 
 	public function results()
