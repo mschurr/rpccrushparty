@@ -1,4 +1,5 @@
 composer.lock
+webapp.log
 cache/*
 vendor/*
 !.gitkeep
