@@ -1,5 +1,6 @@
 composer.lock
 webapp.log
+config.php
 cache/*
 vendor/*
 !.gitkeep
