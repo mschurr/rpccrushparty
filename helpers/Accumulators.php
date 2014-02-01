@@ -5,7 +5,20 @@
 
    Note: This structure is slow; operations occur in O(N) time. It can be done faster, but I don't have enoguh time.
    */
-abstract class Accumulator
+
+abstract class Accumulator extends SplHeap
+{
+	public function __construct($size) {
+		
+	}
+}
+
+
+
+
+
+
+abstract class AccumulatorOLD
 {
 	protected /*int*/ $size;
 	protected /*array<Object>*/ $items;
@@ -26,7 +39,7 @@ abstract class Accumulator
 	public function add(/*Object*/ $item, /*double*/ $score)
 	{
 		for($i = 0; $i < $this->size; $i++) {
-			if($this->items[$i] === null || $this->compare($score, $this->scores[$i]) > 0) {
+			if($this->items[$i] === null/* || $this->compare($score, $this->scores[$i]) > 0*/) {
 				$this->items[$i] = $item;
 				$this->scores[$i] = $score;
 				break;
@@ -34,6 +47,7 @@ abstract class Accumulator
 		}
 	}
 
+	/* Returns items as an array of arraymaps in sorted order by score. */
 	public function toArray()
 	{
 		$array = array();
@@ -48,24 +62,39 @@ abstract class Accumulator
 			);
 		}
 
+		usort($array, array($this, 'compareItems'));
+
 		return $array;
+	}
+
+	public /*int*/ function compareItems($a, $b)
+	{
+		return $this->compare($a['score'], $b['score']);
 	}
 	
 	public abstract /*int*/ function compare(/*double*/ $a, /*double*/ $b);
 }
 
-class MaxAccumulator extends Accumulator
+class MaxAccumulatorOLD extends Accumulator
 {
 	public function compare($a, $b)
 	{
-		return $a > $b;
+		if($a < $b)
+			return 1;
+		if($a == $b)
+			return 0;
+		return -1;
 	}
 }
 
-class MinAccumulator extends Accumulator
+class MinAccumulatorOLD extends Accumulator
 {
-	public function compare($b, $a)
+	public function compare($a, $b)
 	{
-		return $a < $b;
+		if($b > $a)
+			return -1;
+		if($b == $a)
+			return 0;
+		return 1;
 	}
 }

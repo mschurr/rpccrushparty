@@ -7,7 +7,7 @@
 	<form action="/submit" method="POST">
 		<div class="header">{{{$title}}}</div>
 
-		<div class="text">Rice Program Council invites you to join your fellow Rice students at the annual Crush Party event on {{{$eventDate}}} at Willy's Pub. Answer the questions below and we will provide you with your best and worst matches among all participants. The survey will be available until {{{$expDate}}}.</div>
+		<div class="text justify">Rice Program Council invites you to join your fellow Rice students at the annual Crush Party event on {{{$eventDate}}} at Willy's Pub. Answer the questions below and we will provide you with your best and worst matches among all participants. The survey will be available until {{{$expDate}}}.</div>
 
 		@if(sizeof($errors) > 0)
 			<div class="error">Your submission was unsuccessful. Please correct the errors below and try again.</div>
@@ -41,6 +41,7 @@
 		<div class="label">Residential College:</div>
 		{{berror($errors,'college')}}
 		<div class="input"><select name="college">
+			<option value="-1"></option>
 			@foreach($colleges as $cid => $cname)
 				<option value="{{{$cid}}}" {{selected('college',$cid)}}>
 					{{$cname}}
@@ -51,8 +52,20 @@
 		<div class="label">Year:</div>
 		{{berror($errors,'year')}}
 		<div class="input"><select name="year">
+			<option value="-1"></option>
 			@foreach($years as $cid => $cname)
 				<option value="{{{$cid}}}" {{selected('year',$cid)}}>
+					{{$cname}}
+				</option>
+			@endforeach
+		</select></div>
+
+		<div class="label">Major:</div>
+		{{berror($errors,'major')}}
+		<div class="input"><select name="major">
+			<option value="-1"></option>
+			@foreach($majors as $cid => $cname)
+				<option value="{{{$cid}}}" {{selected('major',$cid)}}>
 					{{$cname}}
 				</option>
 			@endforeach
@@ -61,6 +74,7 @@
 		<div class="label">Gender:</div>
 		{{berror($errors,'gender')}}
 		<div class="input"><select name="gender">
+			<option value="-1"></option>
 			@foreach($genders as $gid => $gname)
 				<option value="{{{$gid}}}"  {{selected('gender',$gid)}}>
 					{{{$gname}}}

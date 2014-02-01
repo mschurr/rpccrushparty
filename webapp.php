@@ -30,6 +30,7 @@ class MainController extends Controller
 			'title'		=> SurveyConstants::$title,
 			'eventDate' => SurveyConstants::$eventDate,
 			'expDate'	=> SurveyConstants::$expDate,
+			'majors'	=> SurveyConstants::$majors,
 			'errors'    => $errors
 		));
 	}
@@ -59,6 +60,13 @@ class MainController extends Controller
 		   !is_numeric($this->request->post['college']) ||
 		   !isset(SurveyConstants::$colleges[$this->request->post['college']])) {
 			$errors['college'] = 'You must select a valid option.';
+		}
+
+		// Major
+		if(!isset($this->request->post['major']) ||
+		   !is_numeric($this->request->post['major']) ||
+		   !isset(SurveyConstants::$majors[$this->request->post['major']])) {
+			$errors['major'] = 'You must select a valid option.';
 		}
 
 		// Gender
@@ -110,6 +118,7 @@ class MainController extends Controller
 				':net_id' => $this->request->post['net_id'],
 				':student_id' => $this->request->post['student_id'],
 				':college' => $this->request->post['college'],
+				':major' => $this->request->post['major'],
 				':year' => $this->request->post['year'],
 				':email_address' => $this->request->post['email_address'],
 				':gender' => $this->request->post['gender'],

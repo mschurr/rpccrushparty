@@ -13,7 +13,7 @@ class SurveyMatcher
 		$fields = SurveyConstants::fields();
 		$stmt = $db->prepare("INSERT INTO `surveys` (".sql_keys($fields).") VALUES (".sql_values($fields).");");
 			
-		for($i = 0; $i < 3300; $i++) {
+		for($i = 0; $i < 150; $i++) {
 			$data = array(
 				':student_id' => '0',
 				':send_results' => '0',
@@ -23,7 +23,8 @@ class SurveyMatcher
 				':last_name' => 'Person'.$i,
 				':college' => rand(0, sizeof(SurveyConstants::$colleges)-1),
 				':gender' => rand(0, sizeof(SurveyConstants::$genders)-1),
-				':year' => rand(0, sizeof(SurveyConstants::$years)-1)
+				':year' => rand(0, sizeof(SurveyConstants::$years)-1),
+				':major' => rand(0, sizeof(SurveyConstants::$majors)-1)
 			);
 
 			// Interested
@@ -97,7 +98,8 @@ class SurveyMatcher
 			$oP = array(
 				'name' => $otherParticipant['first_name'].' '.$otherParticipant['last_name'],
 				'year' => $otherParticipant['year'],
-				'college' => $otherParticipant['college']
+				'college' => $otherParticipant['college'],
+				'major' => $otherParticipant['major']
 			);
 
 			if($participant['year'] == $otherParticipant['year']) {
@@ -174,6 +176,7 @@ class SurveyMatcher
 		
 		echo '
 		<div class="_match">
+		<img src="'.URL::asset('img/rpc.jpg').'" />
 		<div class="name">'.$participant['first_name'].' '.$participant['last_name'].'</div>
 		<div class="descr">'.SurveyConstants::$years[$participant['year']].', '.SurveyConstants::$colleges[$participant['college']].'</div>
 		
@@ -224,13 +227,13 @@ class SurveyMatcher
 				echo '
 				<tr>
 					<td class="num">'.$i.')</td>
-					<td>'.$person['item']['name'].'</td>
+					<td>'.$person['item']['name'].'<br />
+					<span class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+					'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</span></td>
 					<td class="perc">'.number_format($person['score']*100,2).'%</td>
 				</tr>';
 				$i++;
-			}/*<br />
-					<span class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
-					'.SurveyConstants::$colleges[$person['item']['college']].'</span>*/
+			}/**/
 
 			echo '</table>
 		</div>

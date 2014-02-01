@@ -15,6 +15,7 @@ CREATE TABLE `surveys` (
   `college` int(32) UNSIGNED NOT NULL,
   `gender` int(32) UNSIGNED NOT NULL,
   `year` int(32) UNSIGNED NOT NULL,
+  `major` int(32) UNSIGNED NOT NULL,
   `send_results` int(32) UNSIGNED NOT NULL,
   `interested_0` int(32) UNSIGNED NOT NULL,
   `interested_1` int(32) UNSIGNED NOT NULL,
