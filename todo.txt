@@ -1,1 +1,0 @@
-* Add best/worst matches in major to results? not enough space
