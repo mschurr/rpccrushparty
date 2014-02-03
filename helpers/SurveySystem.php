@@ -83,9 +83,13 @@ class SurveyMatcher
 		$bestMatchesCollege = new MaxAccumulator(10);
 		$worstMatchesCollege = new MinAccumulator(10);
 
+		// Remember the best and worst matches in this participant's major.
+		$bestMatchesMajor = new MaxAccumulator(10);
+		$worstMatchesMajor = new MinAccumulator(10);
+
 		// Remember the best and worst matches in all other participants.
-		$bestMatchesRest = new MaxAccumulator(10);
-		$worstMatchesRest = new MinAccumulator(10);
+		$bestMatchesRest = new MaxAccumulator(14);
+		$worstMatchesRest = new MinAccumulator(14);
 
 		// Iterate through all of the other participants.
 		foreach($otherParticipants as $otherParticipant) {
@@ -121,6 +125,12 @@ class SurveyMatcher
 				$sorted = true;
 			}
 
+			if($participant['major'] == $otherParticipant['major']) {
+				$bestMatchesMajor->add($oP, $score);
+				$worstMatchesMajor->add($oP, $score);
+				$sorted = true;
+			}
+
 			if(!$sorted) {
 				$bestMatchesRest->add($oP, $score);
 				$worstMatchesRest->add($oP, $score);
@@ -131,9 +141,11 @@ class SurveyMatcher
 		return array(
 			'bestMatchesYear' => $bestMatchesYear->toArray(),
 			'bestMatchesCollege' => $bestMatchesCollege->toArray(),
+			'bestMatchesMajor' => $bestMatchesMajor->toArray(),
 			'bestMatchesRest' => $bestMatchesRest->toArray(),
 			'worstMatchesYear' => $worstMatchesYear->toArray(),
 			'worstMatchesCollege' => $worstMatchesCollege->toArray(),
+			'worstMatchesMajor' => $worstMatchesMajor->toArray(),
 			'worstMatchesRest' => $worstMatchesRest->toArray()
 		);
 	}
@@ -183,6 +195,7 @@ class SurveyMatcher
 		
 		echo '
 		<div class="_match">
+		<div class="sponsor">Crush Party '.date('Y').' Results</div>
 		<img src="'.URL::asset('img/rpc.jpg').'" />
 		<div class="name">'.$participant['first_name'].' '.$participant['last_name'].'</div>
 		<div class="descr">'.SurveyConstants::$years[$participant['year']].', '.SurveyConstants::$colleges[$participant['college']].'</div>
@@ -190,25 +203,41 @@ class SurveyMatcher
 		<div class="section">Best Matches</div>
 		<div class="tbl">';
 
+		$limit = 0;
 		foreach($matches as $type => $people)
 		{
+			if($limit >= 3) break;
 			if(str_startswith($type, 'best')) {
 				$this->drawMatches($type,$people);
+				$limit++;
 			}
 		}
 
-		echo '</div>
+		echo '</div>';
+
+		$this->drawMatchesWide('bestMatchesRest', $matches['bestMatchesRest']);
+
+		echo '
 		<div class="section">Worst Matches</div>
 		<div class="tbl">';
 
+		$limit = 0;
 		foreach($matches as $type => $people)
 		{
+			if($limit >= 3) break;
 			if(str_startswith($type, 'worst')) {
 				$this->drawMatches($type,$people);
+				$limit++;
 			}
 		}
 
-		echo '</div></div>';
+		echo '</div>';
+
+
+		$this->drawMatchesWide('worstMatchesRest', $matches['worstMatchesRest']);
+
+
+		echo '</div>';
 
 		//App::getResponse()->dump($matches);
 		// Include total participants (overall, for each college, for each year) broken down by gender
@@ -217,11 +246,76 @@ class SurveyMatcher
 	protected $headerNames = array(
 		'bestMatchesCollege' => 'In Your College...',
 		'bestMatchesYear' => 'In Your Year...',
+		'bestMatchesMajor' => 'In Your Major...',
 		'bestMatchesRest' => 'Everywhere else...',
 		'worstMatchesCollege' => 'In Your College...',
 		'worstMatchesYear' => 'In Your Year...',
-		'worstMatchesRest' => 'Everywhere else...',
+		'worstMatchesMajor' => 'In Your Major...',
+		'worstMatchesRest' => 'Everywhere else...'
 	);
+
+	public function drawMatchesWide($type, $people)
+	{
+		echo '<div class="tbl_bot">
+
+			<div class="col_bot">
+				<div class="type">'.$this->headerNames[$type].'</div>
+				<table>';
+					for($i = 0; $i < 4; $i++) {
+						$person = $people[$i];
+						echo '
+							<tr>
+								<td class="num">'.($i+1).')</td>
+								<td>'.$person['item']['name'].'<br />
+								</td>
+								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+							</tr>
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
+							';
+					}
+				echo '</table>
+			</div>
+			<div class="col_bot">
+				<div class="indent">&nbsp;</div>
+				<table>
+					';
+					for($i = 4; $i < 8; $i++) {
+						$person = $people[$i];
+						echo '
+							<tr>
+								<td class="num">'.($i+1).')</td>
+								<td>'.$person['item']['name'].'<br />
+								</td>
+								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+							</tr>
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
+							';
+					}
+					echo '
+				</table>
+			</div>
+			<div class="col_bot">
+				<div class="indent">&nbsp;</div>
+				<table>';
+				for($i = 8; $i < 12; $i++) {
+						$person = $people[$i];
+						echo '
+							<tr>
+								<td class="num">'.($i+1).')</td>
+								<td>'.$person['item']['name'].'<br />
+								</td>
+								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+							</tr>
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
+							';
+					}
+				echo '</table>
+			</div>
+		</div>';
+	}
 	
 	public function drawMatches($type,$matches)
 	{
@@ -232,13 +326,15 @@ class SurveyMatcher
 			$i = 1;
 			foreach($matches as $person) {
 				echo '
-				<tr>
-					<td class="num">'.$i.')</td>
-					<td>'.$person['item']['name'].'<br />
-					<span class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
-					'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</span></td>
-					<td class="perc">'.number_format($person['score']*100,2).'%</td>
-				</tr>';
+							<tr>
+								<td class="num">'.($i).')</td>
+								<td>'.$person['item']['name'].'<br />
+								</td>
+								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+							</tr>
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
+							';
 				$i++;
 			}/**/
 

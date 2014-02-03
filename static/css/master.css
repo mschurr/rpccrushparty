@@ -130,7 +130,7 @@ div._match {
   padding: 20px;
   width: inherit;
   border: 2px dotted #000;
-  margin-bottom: 20px;
+  /*margin-bottom: 20px;*/
   /*page-break-before: always;*/
   page-break-inside: avoid;
   page-break-after: always;
@@ -151,6 +151,13 @@ div._match img {
   height: 120px;
 }
 
+div._match .sponsor {
+  position: absolute;
+  font-size: 40px;
+  top: 40px;
+  right: 150px;
+}
+
 div._match div.col {
   display: table-cell;
   width: 33%;
@@ -158,6 +165,26 @@ div._match div.col {
   border-bottom: 1px solid #000;
   border-left: 1px solid #000;
 }
+
+div._match div.tbl_bot {
+  display: table;
+  width: 100%;
+}
+
+div._match div.col_bot {
+  display: table-cell;
+  width: 33%;
+  border-bottom: 1px solid #000;
+}
+
+div._match div.col_bot:first-child {
+  border-left: 1px solid #000;
+}
+
+div._match div.col_bot:last-child {
+  border-right: 1px solid #000;
+}
+
 
 div._match div.col:last-child {
   border-right: 1px solid #000;
@@ -179,12 +206,17 @@ div._match div.section {
   padding: 10px 0px;
 }
 
-div._match div.type {
+div._match div.type,
+div._match div.indent {
   font-size: 1.2em;
   padding: 8px 10px 4px 10px;
   font-style: italic;
   border-bottom: 1px solid #000;
   margin: 0px 10px 8px 10px;
+}
+
+div._match div.indent {
+  border-bottom: 1px solid transparent !important;
 }
 
 div._match ul {
@@ -208,8 +240,8 @@ div._match table tr {
 }
 
 div._match table td {
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
   vertical-align: top;
   line-height: 1.5em;
 }
@@ -218,11 +250,16 @@ div._match table td.num {
   text-align: right;
   padding-right: 8px;
   font-weight: bold;
-  width: 35px;
+  width: 25px;
 }
 
-div._match span.detail {
+div._match table td.detail {
   font-style: italic;
+  padding-left: 24px;
+  padding-top: 0px;
+  overflow: hidden;
+  font-size: 10px;
+  height: 10px;
 }
 
 div._match table td.perc {
