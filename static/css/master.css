@@ -112,6 +112,20 @@ body, html {
   padding: 0px;
 }
 
+@media screen and (max-width: 1000px)
+{
+  div.wrapper {
+    width: 100% !important;
+  }
+
+  div.content_wrapper {
+    border-radius: 0px !important;
+    margin-top: 10px !important;
+    padding: 10px 0px !important;
+  }
+}
+
+
 div._match {
   padding: 20px;
   width: inherit;
