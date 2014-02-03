@@ -9,7 +9,7 @@ function checked($input, $value=null) {
 
 function selected($input, $value) {
 	if(!isset(App::getRequest()->post[$input]))
-		return 'qwer';
+		return '';
 
 	if($value == App::getRequest()->post[$input])
 		return ' selected="selected"';
