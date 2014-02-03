@@ -1,9 +1,15 @@
 <?php
 /* Provides a data structure that remembers at all times the $size best items ever added to the structure.
-   The "best" items are determined by the outcome of the ->compare(a,b) function on scores.
+   The "best" items are determined by the outcome of the ->compare and ->isBetter functions on scores.
    To retireve the items from the array, call ->toArray(). 
 
-   Implemented using a heap for fast access times.
+   Implemented using a heaps for fast access time. To implement a MinAccumulator, we actually use a MaxHeap.
+   The MaxHeap ensures that the maximum (worst) value is always at the top of the heap. When adding new values, 
+   we check to see if they are better than the worst value. If they are, we pop the worst value and add the new
+   one.
+
+   This means that iterating over the heap will return the top best $maxSize values in order from worst to best,
+     but this that is easily reversible and well worth the saved time.
    */
 
 abstract class Accumulator extends SplHeap
