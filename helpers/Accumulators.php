@@ -44,9 +44,8 @@ abstract class Accumulator extends SplHeap
 		);
 	}
 
-	protected abstract /*bool*/ function isBetter($new, $worst);
-	//protected abstract /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2); // Order should place objects opposed to order you actually want them in
-
+	public abstract /*bool*/ function isBetter($new, $worst);
+	
 	/* Returns items as an array of arraymaps in sorted order by score. */
 	public function toArray()
 	{
@@ -63,7 +62,7 @@ abstract class Accumulator extends SplHeap
 class MaxAccumulator extends Accumulator
 {
 	/* Controls the ordering of items within the heap. */
-	protected /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2)
+	public /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2)
 	{
 		if($value2['score'] > $value1['score'])
 			return 1;
@@ -73,7 +72,7 @@ class MaxAccumulator extends Accumulator
 	}
 
 	/* Returns whether or not an item should be added to the heap. */
-	protected /*bool*/ function isBetter($new, $worst)
+	public /*bool*/ function isBetter($new, $worst)
 	{
 		if($new['score'] < $worst['score'])
 			return false;
@@ -84,7 +83,7 @@ class MaxAccumulator extends Accumulator
 class MinAccumulator extends Accumulator
 {
 	/* Controls the ordering of items within the heap. */
-	protected /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2)
+	public /*int*/ function compare(/*mixed*/ $value1, /*mixed*/ $value2)
 	{
 		if($value2['score'] > $value1['score'])
 			return -1;
@@ -94,7 +93,7 @@ class MinAccumulator extends Accumulator
 	}
 
 	/* Returns whether or not an item should be added to the heap. */
-	protected /*bool*/ function isBetter($new, $worst)
+	public /*bool*/ function isBetter($new, $worst)
 	{
 		if($new['score'] > $worst['score'])
 			return false;
