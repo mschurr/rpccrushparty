@@ -3,6 +3,7 @@
 import('SurveySystem');
 import('BladeExtensions');
 import('SQLExtensions');
+import('SurveyMailer');
 
 require(FILE_ROOT.'/config.php');
 
