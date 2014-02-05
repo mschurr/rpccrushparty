@@ -3,18 +3,18 @@
 import('SurveySystem');
 import('BladeExtensions');
 import('SQLExtensions');
-import('SurveyMailer');
 
 require(FILE_ROOT.'/config.php');
 
-Route::get( '/',		'MainController@form'	);
-Route::any(	'/submit',	'MainController@submit'	);
-Route::get( '/error', 	'MainController@error'	);
-Route::get( '/thanks', 	'MainController@thanks'	);
-Route::get( '/expired', 'MainController@expired');
-Route::get( '/results', 'MainController@results');
-Route::get( '/seed', 	'MainController@seed'	);
-Route::get( '/result/{id}', 'MainController@result');
+Route::get( '/',			'MainController@form'	);
+Route::any(	'/submit',		'MainController@submit'	);
+Route::get( '/error', 		'MainController@error'	);
+Route::get( '/thanks', 		'MainController@thanks'	);
+Route::get( '/expired', 	'MainController@expired');
+Route::get( '/results', 	'MainController@results');
+Route::get( '/seed', 		'MainController@seed'	);
+Route::get( '/result/{id}', 'MainController@result' );
+Route::get( '/mail',		'MainController@mail'   );
 
 class MainController extends Controller
 {
@@ -196,5 +196,16 @@ class MainController extends Controller
 		if(sizeof($p) == 0) return 404;
 		echo '<link rel="stylesheet" type="text/css" href="'.URL::asset('css/master.css').'" />';
 		$m->printMatches($p);
+	}
+
+	public function mail()
+	{
+		if(!(php_sapi_name() == 'cli-server'))
+			return 403;
+
+		import('SurveyMailer');	
+
+		$mailer = new SurveyMailer();
+		$mailer->sendForParticipant(with(new SurveyMatcher())->getParticipantById(1));
 	}
 }
