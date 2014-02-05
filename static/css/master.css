@@ -56,6 +56,14 @@ div.label {
 	padding: 5px 10px;
 }
 
+div.logo {
+  /*position: absolute;
+  top: 10px;
+  right: 10px;*/
+  float: right;
+  padding-left: 20px;
+}
+
 .justify {
   text-align: justify;
 }
@@ -91,7 +99,7 @@ div.message.errortype {
 }
 
 div.content {
-
+  position: relative;
 }
 
 div.footer {
@@ -155,7 +163,7 @@ div._match .sponsor {
   position: absolute;
   font-size: 40px;
   top: 40px;
-  right: 150px;
+  right: 200px;
 }
 
 div._match div.col {
