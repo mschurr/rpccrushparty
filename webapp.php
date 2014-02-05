@@ -14,6 +14,7 @@ Route::get( '/thanks', 	'MainController@thanks'	);
 Route::get( '/expired', 'MainController@expired');
 Route::get( '/results', 'MainController@results');
 Route::get( '/seed', 	'MainController@seed'	);
+Route::get( '/result/{id}', 'MainController@result');
 
 class MainController extends Controller
 {
@@ -167,7 +168,7 @@ class MainController extends Controller
 			return 403;
 
 		$matcher = new SurveyMatcher();
-		$matcher->match((isset($this->request->get['limit']) ? $this->request->get['limit'] : 150));
+		$matcher->match((isset($this->request->get['limit']) ? $this->request->get['limit'] : null));
 	}
 
 	public function seed()
@@ -182,5 +183,18 @@ class MainController extends Controller
 		$matcher->seed((isset($this->request->get['limit']) ? $this->request->get['limit'] : 150));
 
 		$this->response->write('OK');
+	}
+
+	public function result($id)
+	{
+		if(!(php_sapi_name() == 'cli-server'))
+			return 403;
+
+		$m = new SurveyMatcher();
+		$p = $m->getParticipantById($id);
+
+		if(sizeof($p) == 0) return 404;
+		echo '<link rel="stylesheet" type="text/css" href="'.URL::asset('css/master.css').'" />';
+		$m->printMatches($p);
 	}
 }

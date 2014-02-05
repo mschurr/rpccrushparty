@@ -23,7 +23,6 @@ class SurveyConstants
 		'Agricultural Engineering',
 		'Environmental Engineering',
 		'Biological Engineering',
-		'Biomedical Engineering',
 		'Chemical Engineering',
 		'Civil Engineering',
 		'Electrical Engineering',
@@ -146,7 +145,8 @@ class SurveyConstants
 				'Milk',
 				'Beer',
 				'Liquor/Mixed Drinks',
-				'Mike\'s Hard Lemonade'
+				'Mike\'s Hard Lemonade',
+				'Water'
 			)
 		),
 		array(
@@ -179,9 +179,10 @@ class SurveyConstants
 				'Dr. Douglas Brinkley',
 				'Dr. Mikki Hebl',
 				'Dr. James Tour',
-				'Dr. Almba Moon Novotny',
+				'Dr. Alma Moon Novotny',
 				'Dr. Dennis Huston',
-				'Dr. Luay Nakleh'
+				'Dr. Luay Nakleh',
+				'I don\'t know any of these people.'
 			)
 		),
 		array(
@@ -244,7 +245,7 @@ class SurveyConstants
 			'options' => array(
 				'I don\'t drink',
 				'I might start drinking when I turn 21',
-				'I drink very occasionally',
+				'I drink occasionally',
 				'I drink every weekend',
 				'I drink more than 3 times a week',
 				'I\'m drunk right now'
@@ -255,7 +256,8 @@ class SurveyConstants
 			'options' => array(
 				'Screamo',
 				'Classical',
-				'Rock / Pop',
+				'Rock',
+				'Pop',
 				'Hip-Hop / Rap / Electronic',
 				'Country',
 				'Sounds of Nature'

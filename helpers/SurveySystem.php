@@ -28,8 +28,9 @@ class SurveyMatcher
 			);
 
 			// Interested
-			for($j = 0; $j < sizeof(SurveyConstants::$genders); $j++)
+			for($j = 0; $j < sizeof(SurveyConstants::$genders); $j++) {
 				$data[':interested_'.$j] = rand(0, 1);
+			}
 
 			// Questions
 			for($j = 0; $j < sizeof(SurveyConstants::$questions); $j++)
@@ -67,6 +68,14 @@ class SurveyMatcher
 		echo '
 			</body>
 		</html>';
+	}
+
+	/* Returns the matches for participant with id. */
+	public /*array*/ function getParticipantById($id)
+	{
+		$stmt = App::getDatabase()->prepare("SELECT * FROM `surveys` WHERE `id` = ? LIMIT 1;");
+		$r = $stmt->execute($id);
+		return $r->row;
 	}
 
 	/* Returns the matches for the provided participant. */
