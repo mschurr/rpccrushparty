@@ -154,15 +154,11 @@ class SurveyMatcher
 	public /*bool*/ function matchIsFeasible($participant, $otherParticipant)
 	{
 		// Make sure that the otherParticipant is a member of a gender this participant is interested in.
-		if($otherParticipant['gender'] === 0 && $participant['interested_0'] === 0)
-			return false;
-		if($otherParticipant['gender'] === 1 && $participant['interested_1'] === 0)
+		if($participant['interested_'.$otherParticipant['gender']] != 1)
 			return false;
 
 		// Make sure that the otherParticipant is interested in this gender of this user.
-		if($participant['gender'] === 0 && $otherParticipant['interested_0'] === 0)
-			return false;
-		if($participant['gender'] === 1 && $otherParticipant['interested_1'] === 0)
+		if($otherParticipant['interested_'.$participant['gender']] != 1)
 			return false;
 
 		return true;
@@ -262,6 +258,8 @@ class SurveyMatcher
 				<div class="type">'.$this->headerNames[$type].'</div>
 				<table>';
 					for($i = 0; $i < 4; $i++) {
+						if(!isset($people[$i]))
+							continue;
 						$person = $people[$i];
 						echo '
 							<tr>
@@ -281,6 +279,8 @@ class SurveyMatcher
 				<table>
 					';
 					for($i = 4; $i < 8; $i++) {
+						if(!isset($people[$i]))
+							continue;
 						$person = $people[$i];
 						echo '
 							<tr>
@@ -300,6 +300,8 @@ class SurveyMatcher
 				<div class="indent">&nbsp;</div>
 				<table>';
 				for($i = 8; $i < 12; $i++) {
+						if(!isset($people[$i]))
+							continue;
 						$person = $people[$i];
 						echo '
 							<tr>
