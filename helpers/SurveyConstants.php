@@ -4,7 +4,7 @@ class SurveyConstants
 {
 	public static $title = 'RPC Crush Party 2014 Survey';
 	public static $eventDate = 'Thursday, February 13th 8:00 PM CST';
-	public static $expDate = 'Wednesday, February 11th 9:00 AM CST';
+	public static $expDate = 'Wednesday, February 12th 9:00 AM CST';
 
 	public static $majors = array(
 		'Undecided',
