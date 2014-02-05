@@ -28,8 +28,15 @@ class SurveyMatcher
 			);
 
 			// Interested
+			$interestedAnything = false;
 			for($j = 0; $j < sizeof(SurveyConstants::$genders); $j++) {
-				$data[':interested_'.$j] = rand(0, 1);
+				$v = rand(0, 1);
+				if($v == 1) $interestedAnything = true;
+				$data[':interested_'.$j] = $v;
+			}
+
+			if(!$interestedAnything) {
+				$data[':interested_'.rand(0,sizeof(SurveyConstants::$genders)-1)] = 1;
 			}
 
 			// Questions
