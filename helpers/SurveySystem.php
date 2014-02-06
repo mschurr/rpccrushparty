@@ -208,7 +208,7 @@ class SurveyMatcher
 		echo '
 		<div class="_match">
 		<div class="sponsor">Crush Party '.date('Y').' Results</div>
-		<img src="'.URL::asset('img/rpc.jpg').'" />
+		<img src="'.URL::asset('img/crush.png').'" />
 		<div class="name">'.$participant['first_name'].' '.$participant['last_name'].'</div>
 		<div class="descr">'.SurveyConstants::$years[$participant['year']].', '.SurveyConstants::$colleges[$participant['college']].'</div>
 		

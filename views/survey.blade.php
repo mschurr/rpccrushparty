@@ -5,9 +5,15 @@
 @section('content')
 
 	<form action="/submit" method="POST">
+		<div class="logo">
+			<img src="{{{ URL::asset('img/crush.png') }}}"
+				 width="200px" />
+		</div>
+	
 		<div class="header">{{{$title}}}</div>
 
 		<div class="text justify">Rice Program Council invites you to join your fellow Rice students at the annual Crush Party event on {{{$eventDate}}} at Willy's Pub. Answer the questions below and we will provide you with your best and worst matches among all participants. The survey will be available until {{{$expDate}}}.</div>
+
 
 		@if(sizeof($errors) > 0)
 			<div class="error">Your submission was unsuccessful. Please correct the errors below and try again.</div>
