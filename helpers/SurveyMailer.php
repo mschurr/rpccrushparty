@@ -27,6 +27,9 @@ class SurveyMailer
 
 	public function sendForParticipant($p)
 	{
+		if($p['send_results'] != 1)
+			return; // Honor the user's preference.
+
 		$message = new Mail();
 		$message->recipientName = $p['first_name'].' '.$p['last_name'];
 		$message->recipient = $p['email_address'];
