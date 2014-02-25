@@ -2,6 +2,8 @@
 
 class Mail
 {
+	protected static $mailer = null;
+
 	public static function enqueue(Mail $message) /*throws MailException*/
 	{
 		self::send($message);
@@ -9,6 +11,14 @@ class Mail
 
 	public static function send(Mail $message) /*throws MailException*/
 	{
+		if(static::$mailer === null) {
+			$transport = Swift_SmtpTransport::newInstance(Config::get('mailer.host'), Config::get('mailer.port'), Config::get('mailer.crypt'))
+				->setUsername(Config::get('mailer.user'))
+				->setPassword(Config::get('mailer.pass'));
+
+			static::$mailer = Swift_Mailer::newInstance($transport);
+		}
+
 		try {
 			$swift = Swift_Message::newInstance()
 				->setSubject($message->subject)
@@ -28,13 +38,7 @@ class Mail
 						->setDisposition('inline')
 				);
 
-			$transport = Swift_SmtpTransport::newInstance(Config::get('mailer.host'), Config::get('mailer.port'), Config::get('mailer.crypt'))
-				->setUsername(Config::get('mailer.user'))
-				->setPassword(Config::get('mailer.pass'));
-
-			$mailer = Swift_Mailer::newInstance($transport);
-
-			$result = $mailer->send($swift);
+			$result = static::$mailer->send($swift);
 
 			if(!$result)
 				throw new MailException("Send Failed");

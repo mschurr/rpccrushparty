@@ -17,6 +17,7 @@ CREATE TABLE `surveys` (
   `year` int(32) UNSIGNED NOT NULL,
   `major` int(32) UNSIGNED NOT NULL,
   `send_results` int(32) UNSIGNED NOT NULL,
+  `results_sent` int(32) UNSIGNED NOT NULL DEFAULT '0',
   `interested_0` int(32) UNSIGNED NOT NULL,
   `interested_1` int(32) UNSIGNED NOT NULL,
   `question_0` int(32) UNSIGNED NOT NULL,

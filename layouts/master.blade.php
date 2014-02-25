@@ -1,6 +1,7 @@
 
 @style(URL::asset('css/master.css'))
 @style(URL::asset('css/layout.css'))
+@script(URL::asset('js/jquery.min.js'))
 @link('shortcut icon', 'image/x-icon', URL::asset('img/favicon.ico'), '')
 
 <div class="wrapper">

@@ -1,23 +1,27 @@
 <?php
-
 Config::set(array(
 	'database.driver'   => 'mysql',
 	'database.host'     => 'localhost',
 	'database.port'     => '3306',
-	'database.user'     => 'httpd',
-	'database.pass'     => 'httpd',
-	'database.name'     => 'crushparty',
+	'database.user'     => '',
+	'database.pass'     => '',
+	'database.name'     => '',
 	'crush.expired'     => false,
-	'cookies.secretKey' => 'somethingrandom',
-	'mailer.name'       => 'Crush Party Results',
-	'mailer.email'      => 'donotreply@riceapps.org',
-	'mailer.host'       => 'mail.riceapps.org',
+	'cookies.secretKey' => '',
+	'mailer.name'       => '',
+	'mailer.email'      => '',
+	'mailer.host'       => '',
 	'mailer.port'       => '465',
-	'mailer.user'       => 'donotreply@riceapps.org',
+	'mailer.user'       => '',
 	'mailer.pass'       => '',
-	'mailer.crypt'      => 'ssl'
+	'mailer.crypt'      => 'ssl',
+	'recaptcha.publicKey' => '',
+	'recaptcha.privateKey' => ''
 ));
 
+/**
+ * Set separate configuration values for local development.
+ */
 if(php_sapi_name() == 'cli-server') {
 	Config::set(array(
 		'database.host'     => 'localhost',

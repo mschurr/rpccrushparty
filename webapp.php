@@ -3,18 +3,21 @@
 import('SurveySystem');
 import('BladeExtensions');
 import('SQLExtensions');
+import('Security');
 
 require(FILE_ROOT.'/config.php');
 
-Route::get( '/',			'MainController@form'	);
-Route::any(	'/submit',		'MainController@submit'	);
-Route::get( '/error', 		'MainController@error'	);
-Route::get( '/thanks', 		'MainController@thanks'	);
-Route::get( '/expired', 	'MainController@expired');
-Route::get( '/results', 	'MainController@results');
-Route::get( '/seed', 		'MainController@seed'	);
-Route::get( '/result/{id}', 'MainController@result' );
-Route::get( '/mail',		'MainController@mail'   );
+Route::get( '/',			 	'MainController@form'	 );
+Route::any(	'/submit',			'MainController@submit'  );
+Route::get( '/error', 		 	'MainController@error'	 );
+Route::get( '/thanks', 			'MainController@thanks'  );
+Route::get( '/expired', 	 	'MainController@expired' );
+Route::get( '/results', 	 	'MainController@results' );
+Route::get( '/seed', 		 	'MainController@seed'	 );
+Route::get( '/result/{id}', 	'MainController@result'  );
+Route::get( '/resulta/{id}',    'MainController@resulta' );
+Route::get( '/answers/{id}', 	'MainController@answers' );
+Route::get( '/mail',		 	'MainController@mail'    );
 
 class MainController extends Controller
 {
@@ -32,7 +35,8 @@ class MainController extends Controller
 			'eventDate' => SurveyConstants::$eventDate,
 			'expDate'	=> SurveyConstants::$expDate,
 			'majors'	=> SurveyConstants::$majors,
-			'errors'    => $errors
+			'errors'    => $errors,
+			'captcha'   => (new HumanDetector())
 		));
 	}
 
@@ -40,6 +44,11 @@ class MainController extends Controller
 	{
 		$errors = array();
 		$required = array('first_name', 'last_name', 'net_id', 'student_id', 'email_address');
+
+		// CAPTCHA
+		if(!with(new HumanDetector())->isHuman()) {
+			$errors['captcha'] = 'The text you entered did not match the image.';
+		}
 
 		// Required Text Fields
 		foreach($required as $k => $field) {
@@ -159,6 +168,9 @@ class MainController extends Controller
 		return View::make('expired');
 	}
 
+	/**
+	 * Returns the results of all users (optionally limited).
+	 */
 	public function results()
 	{
 		if(!(php_sapi_name() == 'cli-server'))
@@ -171,6 +183,9 @@ class MainController extends Controller
 		$matcher->match((isset($this->request->get['limit']) ? $this->request->get['limit'] : null));
 	}
 
+	/**
+	 * Seeds the database with random records for testing.
+	 */
 	public function seed()
 	{
 		if(!(php_sapi_name() == 'cli-server'))
@@ -185,6 +200,9 @@ class MainController extends Controller
 		$this->response->write('OK');
 	}
 
+	/**
+	 * Returns the results for a given user by their id.
+	 */
 	public function result($id)
 	{
 		if(!(php_sapi_name() == 'cli-server'))
@@ -198,6 +216,49 @@ class MainController extends Controller
 		$m->printMatches($p);
 	}
 
+	/**
+	 * Returns the answers for a given user id.
+	 * Useful for experimenting with match scoring algorithm with randomly generated records.
+	 */
+	public function answers($id)
+	{
+		if(!(php_sapi_name() == 'cli-server'))
+			return 403;
+
+		$m = new SurveyMatcher();
+		$p = $m->getParticipantById($id);
+
+		if(sizeof($p) == 0) return 404;
+
+		$ig = array('interested_0', 'interested_1', 'send_results');
+		foreach($p as $k => $v) {
+			if(in_array($k, $ig) && $v == 0)
+				continue;
+			$this->request->post[$k] = $v;
+		}
+
+		return $this->form(array('*' => 'This survey is read-only.'));
+	}
+
+	/**
+	 * Returns the matches for a given user id, ignoring feasibility constraints.
+	 */
+	public function resulta($id)
+	{
+		if(!(php_sapi_name() == 'cli-server'))
+			return 403;
+
+		$m = new SurveyMatcher();
+		$p = $m->getParticipantById($id);
+
+		if(sizeof($p) == 0) return 404;
+		echo '<link rel="stylesheet" type="text/css" href="'.URL::asset('css/master.css').'" />';
+		$m->printMatches($p,true);
+	}
+
+	/**
+	 * Performs the mailing of results.
+	 */
 	public function mail()
 	{
 		if(!(php_sapi_name() == 'cli-server'))
@@ -206,6 +267,7 @@ class MainController extends Controller
 		import('SurveyMailer');	
 
 		$mailer = new SurveyMailer();
-		$mailer->sendForParticipant(with(new SurveyMatcher())->getParticipantById(1));
+		$mailer->send();
+		//$mailer->sendForParticipant(with(new SurveyMatcher())->getParticipantById(1));
 	}
 }

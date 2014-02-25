@@ -4,6 +4,18 @@
 
 @section('content')
 
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("form").submit(function(event){
+				if($(this).data('submitted') == true)
+					event.preventDefault();
+	
+				$(this).data('submitted', true);
+				$(this).find('input[type=submit]').prop('disabled', true);
+			});
+		});
+	</script>
+
 	<form action="/submit" method="POST">
 		<div class="logo">
 			<img src="{{{ URL::asset('img/crush.png') }}}"
@@ -108,6 +120,13 @@
 				</label></div>
 			@endforeach
 		@endforeach
+
+		<div class="label">Verification</div>
+		{{berror($errors,'captcha')}}
+		<div class="text">To verify that you are human, please copy the text in the image to the field below.</div>
+		<div class="input">
+			{{ $captcha->embed() }}
+		</div>
 
 		<div class="label">Additional Options</div>
 		<div class="input"><label>

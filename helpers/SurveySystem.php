@@ -1,11 +1,34 @@
 <?php
+/*
+	Survey Matching System
+
+	NOTE: It's best to identify and purge duplicates using the following query before processing.
+	      It would be better to integrate with Network ID authentication in the future to avoid this.
+
+	SELECT * FROM `surveys` 
+	WHERE `net_id` IN (
+		SELECT DISTINCT `net_id` 
+		FROM `surveys` 
+		GROUP BY `net_id` 
+		HAVING COUNT(*) >= 2
+	) 
+	ORDER BY `net_id` ASC, `id` ASC;
+*/
+
 
 import('SurveyConstants');
 import('SurveyParticipantIterator');
 import('Accumulators');
+import('MatchScoreSystem');
 
 class SurveyMatcher
 {
+	protected $scorer;
+
+	public function __construct() {
+		$this->scorer = new MatchScoreSystem();
+	}
+
 	/* Adds random records the database to test the match maker. */
 	public function seed($amount=200)
 	{
@@ -86,7 +109,7 @@ class SurveyMatcher
 	}
 
 	/* Returns the matches for the provided participant. */
-	public /*array*/ function matchesForParticipant($participant)
+	public /*array*/ function matchesForParticipant($participant, $ignoreFeasability=false)
 	{
 		// Create an iterator over survey participants.
 		$otherParticipants = new SurveyParticipantIterator();
@@ -114,11 +137,11 @@ class SurveyMatcher
 				continue;
 
 			// IMPORTANT: Make sure match is feasible.
-			if(!$this->matchIsFeasible($participant, $otherParticipant))
+			if(!$this->matchIsFeasible($participant, $otherParticipant) && $ignoreFeasability === false)
 				continue;
 
 			// Calculate the match score.
-			$score = $this->matchScore($participant, $otherParticipant);
+			$score = $this->scorer->matchScore($participant, $otherParticipant);
 
 			// Add the match to the structures.
 			$sorted = false;
@@ -197,13 +220,13 @@ class SurveyMatcher
 				$score += 1;
 		}
 
-		return $score / $possible;
+		return $score / ($possible - 1);
 	}
 
 	/* Prints out the matches for a given participant. */
-	public function printMatches($participant)
+	public function printMatches($participant, $ignoreFeasability=false)
 	{
-		$matches = $this->matchesForParticipant($participant);
+		$matches = $this->matchesForParticipant($participant, $ignoreFeasability);
 		
 		echo '
 		<div class="_match">
@@ -238,7 +261,7 @@ class SurveyMatcher
 		{
 			if($limit >= 3) break;
 			if(str_startswith($type, 'worst')) {
-				$this->drawMatches($type,$people);
+				$this->drawMatches($type,$people,false);
 				$limit++;
 			}
 		}
@@ -246,7 +269,7 @@ class SurveyMatcher
 		echo '</div>';
 
 
-		$this->drawMatchesWide('worstMatchesRest', $matches['worstMatchesRest']);
+		$this->drawMatchesWide('worstMatchesRest', $matches['worstMatchesRest'], false);
 
 
 		echo '</div>';
@@ -266,7 +289,7 @@ class SurveyMatcher
 		'worstMatchesRest' => 'Everywhere else...'
 	);
 
-	public function drawMatchesWide($type, $people)
+	public function drawMatchesWide($type, $people,$best=true)
 	{
 		echo '<div class="tbl_bot">
 
@@ -282,7 +305,7 @@ class SurveyMatcher
 								<td class="num">'.($i+1).')</td>
 								<td>'.$person['item']['name'].'<br />
 								</td>
-								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
 							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
@@ -303,7 +326,7 @@ class SurveyMatcher
 								<td class="num">'.($i+1).')</td>
 								<td>'.$person['item']['name'].'<br />
 								</td>
-								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
 							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
@@ -324,7 +347,7 @@ class SurveyMatcher
 								<td class="num">'.($i+1).')</td>
 								<td>'.$person['item']['name'].'<br />
 								</td>
-								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
 							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
@@ -335,7 +358,7 @@ class SurveyMatcher
 		</div>';
 	}
 	
-	public function drawMatches($type,$matches)
+	public function drawMatches($type,$matches,$best=true)
 	{
 		echo '
 		<div class="col">
@@ -348,7 +371,7 @@ class SurveyMatcher
 								<td class="num">'.($i).')</td>
 								<td>'.$person['item']['name'].'<br />
 								</td>
-								<td class="perc">'.number_format($person['score']*100,2).'%</td>
+								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
 							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
