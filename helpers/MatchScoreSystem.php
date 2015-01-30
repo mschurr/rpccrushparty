@@ -1,8 +1,14 @@
 <?php
+
+interface IMatchScoreSystem {
+	public /*double*/ function matchScore($participant, $otherParticipant);
+	public /*String*/ function formatScore($score, $best=true);
+}
+
 /**
  * Provides the match scoring algorithm.
  */
-class MatchScoreSystem
+class MatchScoreSystem implements IMatchScoreSystem
 {
 	public /*double*/ function matchScore($participant, $otherParticipant)
 	{
@@ -12,7 +18,7 @@ class MatchScoreSystem
 		for($q = 0; $q < sizeof(SurveyConstants::$questions); $q++) {
 			$points = $this->pointsForQuestion($q+1, $participant['question_'.$q], $otherParticipant['question_'.$q]);
 			$score += $points[0];
-			$possible += $points[1];			
+			$possible += $points[1];
 		}
 
 		return $score / $possible;
@@ -203,7 +209,7 @@ class MatchScoreSystem
 				array(2, 4, 6)
 			), $a1, $a2, 2, $possible);
 		}
-		
+
 		// 19) Most Important Quality
 		else if($q == 19) {
 			$points = $this->pointsFromMap(array(
