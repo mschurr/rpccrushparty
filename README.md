@@ -11,9 +11,9 @@ To use this,
 * Run the development server for testing `php -S localhost:80 server.php`
 * Deploy using HipHop `./hhvm.sh` or any PHP-enabled web server
 
-To add additional genders, modify `SurveyConstants`.
+To add additional genders, modify `SurveyConstants` and `structure.sql`.
 
-To add additional questions, or modify existing questions, modify `SurveyConstants` and `MatchScoreSystem`.
+To add additional questions, or modify existing questions, modify `SurveyConstants`, `MatchScoreSystem`, and `structure.sql`.
 
 Requirements:
 * Composer (getcomposer.org)
