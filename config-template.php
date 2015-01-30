@@ -6,17 +6,30 @@ Config::set(array(
 	'database.user'     => '',
 	'database.pass'     => '',
 	'database.name'     => '',
-	'crush.expired'     => false,
+	'crush.expired'     => (time() > 999999999999999 ? true : false),
+	'crush.publish'     => (time() > 999999999999999 ? true : false),
 	'cookies.secretKey' => '',
-	'mailer.name'       => '',
-	'mailer.email'      => '',
+	'mailer.name'       => '@riceapps.org',
+	'mailer.email'      => '@riceapps.org',
 	'mailer.host'       => '',
 	'mailer.port'       => '465',
-	'mailer.user'       => '',
+	'mailer.user'       => '@riceapps.org',
 	'mailer.pass'       => '',
 	'mailer.crypt'      => 'ssl',
 	'recaptcha.publicKey' => '',
-	'recaptcha.privateKey' => ''
+	'recaptcha.privateKey' => '',
+
+  'app.development' => true,
+
+  'auth.driver' => 'cas',
+  'users.driver' => 'cas',
+  'groups.driver' => 'db',
+  'auth.driver' => 'cas',
+
+  'auth.cas.host' => 'netid.rice.edu',
+  'auth.cas.port' => 443,
+  'auth.cas.path' => '/cas',
+  'auth.cas.cert' => FILE_ROOT.'/rice-cas.pem',
 ));
 
 /**

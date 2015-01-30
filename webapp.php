@@ -173,6 +173,8 @@ class MainController extends Controller
   {
     if(Config::get('crush.expired', false) === true)
       return Redirect::to('/expired');
+    if (count($this->request->post) == 0)
+      return Redirect::to('/form');
 
     $errors = $this->_validate();
 
