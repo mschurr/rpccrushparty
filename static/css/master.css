@@ -76,12 +76,6 @@ div.text {
 	padding: 10px;
 }
 
-div.error {
-  padding: 10px;
-  color: red;
-  font-weight: bold;
-}
-
 div.wrapper {
   max-width: 1000px;
   width: 90%;
@@ -316,7 +310,7 @@ form input[type=text],
       color: rgb(0,0,0);
     }
 
-    form input[type=submit] {
+    form input[type=submit], a.form_submit_style {
       cursor: pointer;
       display: inline-block;
       margin: 0 1px;
@@ -342,3 +336,56 @@ form input[type=text],
     form input[type=submit]:active {
       top: 2px;
     }
+
+
+div.error,
+div.warning,
+div.notice,
+div.success {
+  margin: 10px 10px;
+  padding: 7px 10px 8px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+  background-position: 6px 9px;
+  background-size: 16px 16px;
+}
+
+div.error a,
+div.warning a,
+div.notice a,
+div.success a {
+  color: inherit !important;
+  text-decoration: none;
+  border-bottom: 1px dotted;
+}
+
+div.error {
+  background-color: #FEE;
+  border: 1px solid #D55;
+  background-image: url('../img/exclamation.png');
+  color: #A22;
+}
+
+div.warning {
+  background-color: #FFD;
+  border: 1px solid #ECA;
+  background-image: url('../img/error.png');
+  color: #A22;
+}
+
+div.notice {
+  background-color: #EEF;
+  border: 1px solid #AAC;
+  background-image: url('../img/information.png');
+  color: #337;
+}
+
+div.success {
+  background-color: #EFE;
+  border: 1px solid #ACA;
+  color: #373;
+  background-image: url('../img/accept.png');
+}

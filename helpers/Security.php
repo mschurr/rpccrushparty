@@ -47,7 +47,6 @@ class HumanDetector
 	protected /*string*/ $error = null;
 
 	public /*void*/ function __construct() {
-		import('Security_ReCAPTCHA');
 	}
 
 	public /*string*/ function embed() {

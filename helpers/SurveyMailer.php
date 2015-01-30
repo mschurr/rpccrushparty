@@ -1,6 +1,5 @@
 <?php
 
-import('Mail');
 import('InlineCSS');
 
 class SurveyMailer
@@ -53,7 +52,7 @@ class SurveyMailer
 		// BUILD: Matches For Gender
 		ob_start();
 		$this->matcher->printMatches($p);
-		$html = ob_get_contents();				
+		$html = ob_get_contents();
 		ob_end_clean();
 		$css = file_get_contents(FILE_ROOT.'/static/css/master.css');
 		$converter->setHTML($html);
@@ -63,7 +62,7 @@ class SurveyMailer
 		// BUILD: Matches For Everyone
 		ob_start();
 		$this->matcher->printMatches($p,true);
-		$html = ob_get_contents();				
+		$html = ob_get_contents();
 		ob_end_clean();
 		$css = file_get_contents(FILE_ROOT.'/static/css/master.css');
 		$converter->setHTML($html);

@@ -5,13 +5,13 @@
 	NOTE: It's best to identify and purge duplicates using the following query before processing.
 	      It would be better to integrate with Network ID authentication in the future to avoid this.
 
-	SELECT * FROM `surveys` 
+	SELECT * FROM `surveys`
 	WHERE `net_id` IN (
-		SELECT DISTINCT `net_id` 
-		FROM `surveys` 
-		GROUP BY `net_id` 
+		SELECT DISTINCT `net_id`
+		FROM `surveys`
+		GROUP BY `net_id`
 		HAVING COUNT(*) >= 2
-	) 
+	)
 	ORDER BY `net_id` ASC, `id` ASC;
 */
 
@@ -34,20 +34,19 @@ class SurveyMatcher
 	{
 		$db = App::getDatabase();
 		$fields = SurveyConstants::fields();
-		$stmt = $db->prepare("INSERT INTO `surveys` (".sql_keys($fields).") VALUES (".sql_values($fields).");");
-			
+
 		for($i = 0; $i < $amount; $i++) {
 			$data = array(
-				':student_id' => '0',
-				':send_results' => '0',
-				':email_address' => 'person'.$i.'@rice.edu',
-				':net_id' => 'p'.$i,
-				':first_name' => 'Random',
-				':last_name' => 'Person'.$i,
-				':college' => rand(0, sizeof(SurveyConstants::$colleges)-1),
-				':gender' => rand(0, sizeof(SurveyConstants::$genders)-1),
-				':year' => rand(0, sizeof(SurveyConstants::$years)-1),
-				':major' => rand(0, sizeof(SurveyConstants::$majors)-1)
+				'student_id' => '0',
+				'send_results' => '0',
+				'email_address' => 'person'.$i.'@rice.edu',
+				'net_id' => 'p'.$i,
+				'first_name' => 'Random',
+				'last_name' => 'Person'.$i,
+				'college' => rand(0, sizeof(SurveyConstants::$colleges)-1),
+				'gender' => rand(0, sizeof(SurveyConstants::$genders)-1),
+				'year' => rand(0, sizeof(SurveyConstants::$years)-1),
+				'major' => rand(0, sizeof(SurveyConstants::$majors)-1)
 			);
 
 			// Interested
@@ -55,18 +54,19 @@ class SurveyMatcher
 			for($j = 0; $j < sizeof(SurveyConstants::$genders); $j++) {
 				$v = rand(0, 1);
 				if($v == 1) $interestedAnything = true;
-				$data[':interested_'.$j] = $v;
+				$data['interested_'.$j] = $v;
 			}
 
 			if(!$interestedAnything) {
-				$data[':interested_'.rand(0,sizeof(SurveyConstants::$genders)-1)] = 1;
+				$data['interested_'.rand(0,sizeof(SurveyConstants::$genders)-1)] = 1;
 			}
 
 			// Questions
 			for($j = 0; $j < sizeof(SurveyConstants::$questions); $j++)
-				$data[':question_'.$j] = rand(0, sizeof(SurveyConstants::$questions[$j]['options'])-1);
+				$data['question_'.$j] = rand(0, sizeof(SurveyConstants::$questions[$j]['options'])-1);
 
-			$stmt->execute($data);
+			$stmt = $db->prepare("INSERT INTO `surveys` (".sql_keys($data).") VALUES (".sql_values($data).");");
+			$stmt->execute(sql_parameters($data));
 		}
 	}
 
@@ -104,6 +104,14 @@ class SurveyMatcher
 	public /*array*/ function getParticipantById($id)
 	{
 		$stmt = App::getDatabase()->prepare("SELECT * FROM `surveys` WHERE `id` = ? LIMIT 1;");
+		$r = $stmt->execute($id);
+		return $r->row;
+	}
+
+	/* Returns the matches for participant with net id. */
+	public /*array*/ function getParticipantByNetId($id)
+	{
+		$stmt = App::getDatabase()->prepare("SELECT * FROM `surveys` WHERE `net_id` = ? LIMIT 1;");
 		$r = $stmt->execute($id);
 		return $r->row;
 	}
@@ -227,14 +235,14 @@ class SurveyMatcher
 	public function printMatches($participant, $ignoreFeasability=false)
 	{
 		$matches = $this->matchesForParticipant($participant, $ignoreFeasability);
-		
+
 		echo '
 		<div class="_match">
 		<div class="sponsor">Crush Party '.date('Y').' Results</div>
 		<img src="'.URL::asset('img/crush.png').'" />
 		<div class="name">'.$participant['first_name'].' '.$participant['last_name'].'</div>
 		<div class="descr">'.SurveyConstants::$years[$participant['year']].', '.SurveyConstants::$colleges[$participant['college']].'</div>
-		
+
 		<div class="section">Best Matches</div>
 		<div class="tbl">';
 
@@ -307,7 +315,7 @@ class SurveyMatcher
 								</td>
 								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
-							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].',
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
 							';
 					}
@@ -328,7 +336,7 @@ class SurveyMatcher
 								</td>
 								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
-							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].',
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
 							';
 					}
@@ -349,7 +357,7 @@ class SurveyMatcher
 								</td>
 								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
-							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].',
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
 							';
 					}
@@ -357,7 +365,7 @@ class SurveyMatcher
 			</div>
 		</div>';
 	}
-	
+
 	public function drawMatches($type,$matches,$best=true)
 	{
 		echo '
@@ -373,7 +381,7 @@ class SurveyMatcher
 								</td>
 								<td class="perc">'.$this->scorer->formatScore($person['score'],$best).'</td>
 							</tr>
-							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].', 
+							<tr><td colspan="3" class="detail">'.SurveyConstants::$years[$person['item']['year']].',
 								'.SurveyConstants::$colleges[$person['item']['college']].': '.SurveyConstants::$majors[$person['item']['major']].'</td></tr>
 							';
 				$i++;

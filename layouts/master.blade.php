@@ -23,5 +23,4 @@
 
   ga('create', 'UA-47685499-1', 'crush.riceapps.org');
   ga('send', 'pageview');
-
 </script>

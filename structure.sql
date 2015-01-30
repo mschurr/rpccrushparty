@@ -43,3 +43,11 @@ CREATE TABLE `surveys` (
   `question_20` int(32) UNSIGNED NOT NULL,
   PRIMARY KEY  (`id`)
 );
+
+CREATE TABLE `survey_results` (
+  `net_id` varchar(16) NOT NULL,
+  `result_html` mediumtext NOT NULL,
+  PRIMARY KEY  (`net_id`)
+);
+
+CREATE INDEX `surveys_netid` ON `surveys` (`net_id`);
